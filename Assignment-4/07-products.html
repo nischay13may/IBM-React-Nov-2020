@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Products</title>
+    <style>
+        .error{
+            color : red;
+        }
+    </style>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        class Products extends React.Component{
+
+            state = {
+                productName: '',
+                productNames: [],
+                errorFlag: false
+            };
+            productNames= [ ];
+           
+            onProductChange = (evt) => {
+                this.setState({ productName : evt.target.value});
+            };
+            addProduct = () => {
+                const { productName }= this.state;
+                this.setState({errorFlag: false});
+                for(let i=0; i<this.productNames.length; i++){
+                    if(this.productNames[i] === productName){
+                        this.setState({errorFlag: true});
+                    }
+                }
+                setTimeout(()=> {
+                    if(this.state.errorFlag === false){
+                        this.productNames.push(productName);
+                        this.setState({productNames: this.productNames})
+                    }
+                }, 0);
+            }
+
+            render(){
+                
+                const productItems = this.state.productNames.map((productName, index) => (<li key={index}>{productName}</li>));
+                return(
+                    <div>
+                        <h1>Products</h1>
+                        <hr/>
+                        <label>Product Name :</label>
+                        <input type="text" id="products" name="products" onChange={this.onProductChange}/>
+                        <input type="button" value="Add Product" onClick={this.addProduct}/>
+                        { this.state.errorFlag===true ? (<span className="error">Product already present!</span>) : null }
+                        <ol>
+                            {productItems}
+                        </ol>
+                    </div>
+                )
+            }
+        }
+
+        ReactDOM.render(<Products/>, document.getElementById('root'));
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
